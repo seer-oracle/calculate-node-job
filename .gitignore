@@ -1,0 +1,7 @@
+venv
+.idea
+__pycache__
+src/keystore
+.env
+.env_testnet
+conf/

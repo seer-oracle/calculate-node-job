@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  oracle-calculating-node:
+    # Name the service container
+    image: rinz-io-job
+    container_name: rinz-io-job
+    build: ./
+    restart: on-failure
+    volumes:
+      - ./:/webapps/rinz-io
+      - /var/log/apps/:/var/log/apps/
+    #env_file:
+    # - ./local.env
+    networks:
+      - rinz-io-network
+    command: supervisord -n -c /etc/supervisor.d/supervisord.conf
+
+  oracle-worker:
+    image: rinz-io-job-worker
+    container_name: rinz-io-job-worker
+    build: ./
+    restart: on-failure
+    #env_file:
+    # - ./local.env
+    networks:
+      - rinz-io-network
+    command: supervisord -n -c /etc/supervisor.d/worker.conf
+networks:
+  rinz-io-network:
+    external: true
