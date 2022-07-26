@@ -76,6 +76,17 @@ def save_expirable_to_redis(key: string, value: string, time=Constants.TTL_DEFAU
 
 
 """
+    Write expirable value to redis
+    @params: _key: string
+    @return: 0 (Failed) or 1 (Success)
+"""
+
+
+def get_expirable_to_redis(name: string):
+    return redis_cluster.get(name=name)
+
+
+"""
     Write non-expirable value to redis
     @params: _key: string
     @return: 0 (Failed) or 1 (Success)

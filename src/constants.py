@@ -11,7 +11,11 @@ class Constants(object):
         'Gemini',
         'Poliniex',
         'Kraken_CW',
-        'Vexchange'
+        'Vexchange',
+        'KuCoin',
+        'OceanEx',
+        'Houbi',
+        'BitMart'
     ]
 
     LIST_SYMBOL = [
@@ -138,17 +142,16 @@ class Constants(object):
         0.01,
         0.01,
         0.01,
-        0.03,
-        0.03,
-        0.03,
-        0.03,
-        0.03,
-        0.03,
+        0.02,
+        0.02,
+        0.02,
+        0.02,
+        0.02,
+        0.02,
         0.01,
         0.01
     ]
 
     CHOOSING_FUNCTION_REDIS_KEY = 'Oracle:choosing_function'
     CHOOSING_FUNCTION_REDIS_FIELD = 'function'
-
     HARD_CODE_PRICE_VB = 10.12315

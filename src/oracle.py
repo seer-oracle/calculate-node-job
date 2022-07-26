@@ -1,13 +1,13 @@
 import sys
-sys.path.append('.')
+import time
 from helper import get_latest_key, utc_timestamp_now, \
     get_single_price_from_redis, get_key_from_redis, save_non_expirable_to_redis, gen_storing_calculating_price_key, \
-    is_price_diff_enough, average, save_expirable_to_redis
+    is_price_diff_enough, average, save_expirable_to_redis, get_expirable_to_redis
 from Price import *
-import time
 from constants import Constants
 import statistics
 from src.workers import update_prices_to_smc, update_public_prices_to_smc
+sys.path.append('.')
 
 
 def main():
@@ -110,14 +110,17 @@ def main():
             
             # Save to redis the final price of each calculation point of time
             key_redis = gen_storing_calculating_price_key(Constants.LIST_SYMBOL[index_of_symbol], _now)
+
             print('Save to redis with key : ', key_redis)
             value_redis = EMA[index_of_symbol]
             result = save_expirable_to_redis(
                 key=key_redis,
                 value=value_redis
             )
-
             print('**result = ', result)
+
+            # Save latest update timestamp of each pair
+            save_expirable_to_redis(key=f"{Constants.LIST_SYMBOL[index_of_symbol]}_last_timestamp", value=_now)
 
             # Check if the freshness of data
             # reset calculation start point when data reach limit of freshness
@@ -209,10 +212,10 @@ def main():
                 _public_submit_list.append(0)
 
         if not all(_p == 0 for _p in _choosing_public_prices):
-            update_public_prices_to_smc.delay(
-                assets=Constants.LIST_PUBLIC_PAIR_ADDRESS,
-                prices=_public_submit_list
-            )
+            # update_public_prices_to_smc.delay(
+            #     assets=Constants.LIST_PUBLIC_PAIR_ADDRESS,
+            #     prices=_public_submit_list
+            # )
             for _index in range(len(_public_submit_list)):
                 if _public_submit_list[_index] != 0:
                     _prev_public_price_list[_index] = _public_submit_list[_index]
